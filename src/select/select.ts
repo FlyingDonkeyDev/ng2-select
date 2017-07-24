@@ -143,6 +143,7 @@ let styles = `
       </span>
     </div>
     <input type="text" autocomplete="false" tabindex="-1"
+            (blur)="inputBlur($event)"
            (keydown)="inputEvent($event)"
            (keyup)="inputEvent($event, true)"
            [disabled]="disabled"
@@ -205,6 +206,7 @@ let styles = `
         </span>
     </span>
     <input type="text"
+            (blur)="inputBlur($event)"
            (keydown)="inputEvent($event)"
            (keyup)="inputEvent($event, true)"
            (click)="matchClick($event)"
@@ -307,6 +309,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   @Output() public selected:EventEmitter<any> = new EventEmitter();
   @Output() public removed:EventEmitter<any> = new EventEmitter();
   @Output() public typed:EventEmitter<any> = new EventEmitter();
+  @Output() public blur:EventEmitter<any> = new EventEmitter();
   @Output() public opened:EventEmitter<any> = new EventEmitter();
 
   public options:Array<SelectItem> = [];
@@ -345,6 +348,10 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   public sanitize(html:string):SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  public inputBlur(e:any):void {
+    this.blur.emit(e);
   }
 
   public inputEvent(e:any, isUpMode:boolean = false):void {
