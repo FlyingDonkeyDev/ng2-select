@@ -583,6 +583,7 @@ var SelectComponent = SelectComponent_1 = (function () {
             e.stopPropagation();
             e.preventDefault();
         }
+        console.log('v1', this.isDisabled(value));
         if (this.isDisabled(value)) {
             this.hideOptions();
             return;

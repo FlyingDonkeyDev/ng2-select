@@ -580,6 +580,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
       e.stopPropagation();
       e.preventDefault();
     }
+    console.log('v1', this.isDisabled(value));
     if (this.isDisabled(value)) {
       this.hideOptions();
       return;
