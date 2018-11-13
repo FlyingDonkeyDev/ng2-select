@@ -581,6 +581,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
       e.preventDefault();
     }
     if (this.isDisabled(value)) {
+      this.hideOptions();
       return;
     }
     if (this.options.length <= 0) {

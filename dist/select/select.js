@@ -331,6 +331,7 @@ var SelectComponent = SelectComponent_1 = (function () {
             e.preventDefault();
         }
         if (this.isDisabled(value)) {
+            this.hideOptions();
             return;
         }
         if (this.options.length <= 0) {
