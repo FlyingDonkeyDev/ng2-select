@@ -1,7 +1,8 @@
 export class SelectItem {
   public id:string;
   public text:string;
-  public children:Array<SelectItem>;
+  public disabled:boolean;
+  public children:SelectItem[];
   public parent:SelectItem;
 
   public constructor(source:any) {
@@ -11,6 +12,7 @@ export class SelectItem {
     if (typeof source === 'object') {
       this.id = source.id || source.text;
       this.text = source.text;
+      this.disabled = source.disabled;
       if (source.children && source.text) {
         this.children = source.children.map((c:any) => {
           let r:SelectItem = new SelectItem(c);

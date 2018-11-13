@@ -1,7 +1,8 @@
 export declare class SelectItem {
     id: string;
     text: string;
-    children: Array<SelectItem>;
+    disabled: boolean;
+    children: SelectItem[];
     parent: SelectItem;
     constructor(source: any);
     fillChildrenHash(optionsMap: Map<string, number>, startIndex: number): number;

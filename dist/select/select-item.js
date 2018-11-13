@@ -8,6 +8,7 @@ var SelectItem = (function () {
         if (typeof source === 'object') {
             this.id = source.id || source.text;
             this.text = source.text;
+            this.disabled = source.disabled;
             if (source.children && source.text) {
                 this.children = source.children.map(function (c) {
                     var r = new SelectItem(c);

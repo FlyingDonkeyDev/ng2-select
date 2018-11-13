@@ -155,6 +155,7 @@ let styles = `
           class="ui-select-choices dropdown-menu" role="menu">
         <li *ngFor="let o of options" role="menuitem">
           <div class="ui-select-choices-row"
+               [class.disabled]="isDisabled(o)"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)">
@@ -173,6 +174,7 @@ let styles = `
   
           <div *ngFor="let o of c.children"
                class="ui-select-choices-row"
+               [class.disabled]="isDisabled(o)"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)"
@@ -223,6 +225,7 @@ let styles = `
           class="ui-select-choices dropdown-menu" role="menu">
         <li *ngFor="let o of options" role="menuitem">
           <div class="ui-select-choices-row"
+               [class.disabled]="isDisabled(o)"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)">
@@ -241,6 +244,7 @@ let styles = `
   
           <div *ngFor="let o of c.children"
                class="ui-select-choices-row"
+               [class.disabled]="isDisabled(o)"
                [class.active]="isActive(o)"
                (mouseenter)="selectActive(o)"
                (click)="selectMatch(o, $event)"
@@ -260,6 +264,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() public idField:string = 'id';
   @Input() public textField:string = 'text';
   @Input() public childrenField:string = 'children';
+  @Input() public disableField:string = 'disabled';
   @Input() public multiple:boolean = false;
 
   @Input()
@@ -272,7 +277,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
           return item;
         }
       });
-      this.itemObjects = this._items.map((item:any) => (typeof item === 'string' ? new SelectItem(item) : new SelectItem({id: item[this.idField], text: item[this.textField], children: item[this.childrenField]})));
+      this.itemObjects = this._items.map((item:any) => (typeof item === 'string' ? new SelectItem(item) : new SelectItem({id: item[this.idField], disabled: item[this.disableField], text: item[this.textField], children: item[this.childrenField]})));
     }
   }
 
@@ -289,7 +294,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   }
 
   @Input()
-  public set active(selectedItems:Array<any>) {
+  public set active(selectedItems:any[]) {
     if (!selectedItems || selectedItems.length === 0) {
       this._active = [];
     } else {
@@ -312,12 +317,12 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   @Output() public blur:EventEmitter<any> = new EventEmitter();
   @Output() public opened:EventEmitter<any> = new EventEmitter();
 
-  public options:Array<SelectItem> = [];
-  public itemObjects:Array<SelectItem> = [];
+  public options:SelectItem[] = [];
+  public itemObjects:SelectItem[] = [];
   public activeOption:SelectItem;
   public element:ElementRef;
 
-  public get active():Array<any> {
+  public get active():any[] {
     return this._active;
   }
 
@@ -527,6 +532,10 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     this.activeOption = value;
   }
 
+  protected isDisabled(value:SelectItem):boolean {
+    return !!value.disabled;
+  }
+
   protected  isActive(value:SelectItem):boolean {
     return this.activeOption.id === value.id;
   }
@@ -570,6 +579,9 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
+    }
+    if (this.isDisabled(value)) {
+      return;
     }
     if (this.options.length <= 0) {
       return;
